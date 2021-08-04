@@ -1,12 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Category;
 
-class UserController extends Controller
+class CategoryController extends Controller
 {
+
+    public function home (){
+        return view('categories.home');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +18,13 @@ class UserController extends Controller
      */
     public function index()
     {
-        return 'Admin User\'s Friend Page';
+        $category = [
+            ['id' => 1, 'name'=>'cate1'],
+            ['id' => 2, 'name'=>'cate2'],
+            ['id' => 3, 'name'=>'cate3'],
+            ['id' => 4, 'name'=>'cate4']
+        ];
+        return view('categories.index', compact('category'));
     }
 
     /**
@@ -44,9 +54,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $cate)
     {
-        //
+        dd($cate);
+        return '';
     }
 
     /**

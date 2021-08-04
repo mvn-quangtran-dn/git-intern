@@ -65,41 +65,22 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel ph43
-                </div>
-                @php
-                dd(\URL::temporarySignedRoute(
-                    'users.reset-pass',
-                    \Carbon\Carbon::now()->addMinute(1),
-                    ['id' => 1]
-                ));
-                // route('name route', param);
-                @endphp
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                {{-- <div class="title m-b-md"> --}}
+
+                    <h1>{{ $data }}</h1>
+                    <h1>{{ $data1 }}</h1>
+                    <form action="{{ route('users.forgot-pass', 1) }}" method="POST">
+                        @csrf
+                        <label>Enter your email</label>
+                        <input type="text" class="" name="email"/>
+                        <label>Enter your address</label>
+                        <input type="text" class="" name="address"/>
+                        <label>Enter your password</label>
+                        <input type="password" class="" name="password"/>
+                        <button type="submit" class="">Submit</button>
+                    </form>
+                {{-- </div> --}}
             </div>
         </div>
     </body>
