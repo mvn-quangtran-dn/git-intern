@@ -81,4 +81,4 @@ Route::get('users/{user}/images', 'UserController@getImages');
 Route::get('users/{user}/upload', 'UserController@showFormUpload');
 Route::post('users/{user}/upload', 'UserController@upload')->name('users.upload');
 Route::get('categories/{cate}', 'UserController@upload')->name('users.upload');
-Route::get('/abc', 'UserController@abc')->name('users.abc');
+Route::get('/def', 'UserController@abc')->name('users.abc');
