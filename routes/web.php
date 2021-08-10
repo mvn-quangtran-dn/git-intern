@@ -15,68 +15,31 @@ Route::get('/', function () {
     return view('home.welcome');
 });
 
-Route::group([
-    'prefix' => 'admin',
-    'as' => 'admin.',
-    // 'namespace' => 'Admin',
-    // 'middleware' => ['is.Admin', 'login'],
-], function(){
-
-    Route::get('users/{id}/friends/{friendID}', 'Admin\UserController@index')
-        ->name('user.friend'); 
-    
-});
-
-Route::get('users/{id}/friends/{friendID}', 'UserController@index')
-->name('user.friend'); 
-
-//show page nhaajp email forgot password
-Route::get('users/{id}/forgot-pass', 'UserController@forgotPassword')->name('forgot');
-//submit form forgot-pass
-Route::post('users/{id}/forgot-pass', 'UserController@sendForgotPassMail')->name('users.forgot-pass');
-//link show page reset new pass
-Route::get('users/{id}/reset-pass', 'UserController@resetPassword')->name('users.reset-pass')->middleware('signed');
-
-
-Route::get('users/update', 'UserController@update');
-Route::get('users/{user}', 'UserController@show');
-
 // Route::resource('users', 'UserController');
-
-// Route::get('users/{user}', 'UserController@show');
-Route::get('categories/{cate}', 'CategoryController@show');
-
-Route::get('test-redirect', function (){
-    // return redirect()->to('/users');
-    // return redirect()->route('users.show', 1);
-    return redirect('/users');
+Route::group([], function (){
+    //list user
+    Route::get('users', 'UserController@index')->name('users.index');
+    //show form create user 
+    Route::get('users/create', 'UserController@create')->name('users.create');
+    //store users
+    Route::post('users', 'UserController@store')->name('users.store');
+    //show user detail
+    Route::get('users/{id}', 'UserController@show')->name('users.show');
+    //delete user
+    Route::delete('users/{id}', 'UserController@destroy')->name('users.destroy');
 });
+Auth::routes();
 
-Route::get('users', [UserController::class, 'index']);
+Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('profiles', 'ProfileController@index')->name('profiles.index');
-Route::get('profiles/restore/{id?}', 'ProfileController@restore')->name('profiles.restore');
-Route::get('profiles/{id}', 'ProfileController@destroy')->name('profiles.destroy');
-Route::get('profiles/{id}/update', 'ProfileController@update')->name('profiles.update');
-Route::get('contacts', 'ContactController@index');
+// Show form login
+Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 
-//get role of user by id
-Route::get('users/{user}/roles', 'UserController@getRoles');
+//Submit login form
+Route::post('/login', 'Auth\LoginController@login')->name('login');
 
+//show registration form 
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 
-Route::get('roles/{role}/users', 'RoleController@getUsers');
-Route::get('users/{userId}/set-role/{roleId}', 'UserController@setRoles');
-Route::get('users/{user}/remove-role/{role}', 'UserController@removeRoles');
-Route::get('users/{user}/sync-role/{role}', 'UserController@syncRoles');
-
-Route::get('countries/{country}/posts', 'CountryController@getPosts');
-
-Route::get('users/{user}/images', 'UserController@getImages');
-
-
-
-
-
-
-Route::get('users/{user}/upload', 'UserController@showFormUpload');
-Route::post('users/{user}/upload', 'UserController@upload')->name('users.upload');
+//store user registration
+Route::post('register', 'Auth\RegisterController@register')->name('register');

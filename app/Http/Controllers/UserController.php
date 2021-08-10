@@ -9,9 +9,14 @@ use App\Category;
 use App\NguoiDung;
 use App\Role;
 use App\Rules\WhiteListEmailDomain;
+use App\Country;
 use App\Http\Requests\CreateUserRequest;
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('check.user.permission')->except(['index', 'create']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,48 +24,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('posts', 'profile', 'images', 'posts.images' )->get();
-        dd($users->toArray());
+        $users = User::all();
         return view('users.index', compact('users'));
     }
 
-    // public function forgotPassword(){
-    //     $data = request()->all();
-    //     // dd($data);
-    //     $data = 'hello, this is forgot password page.';
-    //     $data1 = 'hello, this is forgot password page1.';
-    //     // return view('users.forgot-password')->with(['data' => 'hello, this is forgot password page.']);
-    //     // return view('users.forgot-password', ['data' => 'hello, this is forgot password page.']);
-    //     return view('users.forgot-password', compact('data', 'data1'));
-    // }
-
-    // public function sendForgotPassMail($id, Request $request){
-
-    //     //C1 dung ham request()
-    //     // $data = request()->all();
-    //     // $data = request()->only(['email']);
-    //     // $data = request()->except(['email']);
-    //     // $data = request()->search;
-
-    //     //C2 dung $request instance of class Request
-    //     $data1 = $request->all();
-    //     $data2 = $request->only(['email']);
-    //     $data3 = $request->except(['email']);
-    //     $data4 = $request->email;
-    //     dd($data1,$data2,$data3,$data4);
-
-    //     // $email = $request->email;
-    //     // dd($email);
-    //     // $urlResetPass = \URL::temporarySignedRoute('users.reset-pass',
-    //     //     \Carbon\Carbon::now()->addMinute(1),
-    //     //     $id);
-    //     //     dd($urlResetPass);
-    //     //code send mail 
-    // }
-    // public function resetPassword($id){
-
-    //     return 'page reset password for user'.$id;
-    // }
     /**
      * Show the form for creating a new resource.
      *
@@ -68,7 +35,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $countries = Country::all();
+        return view('users.create', compact('countries'));
     }
 
     /**
@@ -79,9 +47,10 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        $data = $request->all();
-        User::create($data);// creating , created
-        return 'store user sucess';
+        $data = $request->all(); //array
+        $data['password'] = bcrypt($data['password']);
+        User::create($data);
+        return redirect()->route('users.index');
     }
 
     /**
@@ -92,22 +61,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        // $cate= Category::all();
-        // $user = User::findOrFail($id);
-        // $user = User::find($id);
-        // $user = \DB::select('select * from users where id = ? ',[$id]);
-        // $user = \DB::table('users')
-        //             ->join('profiles', function ($join) {
-        //                 $join->on('users.id', '=', 'profiles.user_id');
-        //             })
-        //             ->select('users.*','profiles.id as profile_id', 'address', 'age', 'gender' )
-        //             ->get();
-
-
-        if ($user) {
+        $user = User::findOrFail($id);
         return view('users.show', compact('user'));
-        }
-        return redirect()->back()->with(['error' => 'not found user']);
     }
 
     /**
@@ -175,10 +130,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        // \DB::enableQueryLog();
-        $user =User::findOrFail($id);
-        $user->delete();
-        // dd(\DB::getQueryLog());
+        User::destroy($id);
         return redirect()->route('users.index');
     }
 
@@ -186,7 +138,7 @@ class UserController extends Controller
     {
         $user = User::with('roles', 'profile')->findOrFail($id)->toArray();
         dd($user);
-                // $roles = $user->roles;
+                // $roles = $user->roles; // collection 
         dd($roles);
     }
 

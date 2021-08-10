@@ -84,9 +84,7 @@
                     Laravel Home
                 </div>
 
-                <div class="links">
-                    <a href="{{route('admin.user.friend', [2,1] )}}">User's Friend</a>
-                </div>
+                
             </div>
         </div>
     </body>

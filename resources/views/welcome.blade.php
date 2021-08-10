@@ -83,14 +83,7 @@
                 <div class="title m-b-md">
                     Laravel ph43
                 </div>
-                @php
-                dd(\URL::temporarySignedRoute(
-                    'users.reset-pass',
-                    \Carbon\Carbon::now()->addMinute(1),
-                    ['id' => 1]
-                ));
-                // route('name route', param);
-                @endphp
+    
                 <div class="links">
                     <a href="https://laravel.com/docs">Docs</a>
                     <a href="https://laracasts.com">Laracasts</a>

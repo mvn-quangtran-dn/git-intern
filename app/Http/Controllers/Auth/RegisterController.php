@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Country;
+use App\Http\Requests\RegiterUserRequest;
 
 class RegisterController extends Controller
 {
@@ -68,5 +70,21 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    public function showRegistrationForm()
+    {
+        $countries = Country::all();
+        return view('users.register', compact('countries'));
+    }
+
+    public function register(RegiterUserRequest $request)
+    {
+        $data = $request->all();
+        $data['password'] = bcrypt($data['password']);
+        $user = User::create($data);
+        $this->guard()->login($user);
+        return redirect('home');
+        
     }
 }

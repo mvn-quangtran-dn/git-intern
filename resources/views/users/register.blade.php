@@ -1,8 +1,8 @@
 @extends('layouts.master')
 @section('content')
-<h1>Create User Page</h1>
+<h1>Register User Page</h1>
 
-<form action="{{route('users.store')}}" method="POST">
+<form action="{{route('register')}}" method="POST">
     @csrf
     <div class="form-group">
         <div class="form-group">
