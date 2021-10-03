@@ -53,6 +53,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'country_id' => ['required','numeric'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -68,15 +69,16 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'country_id' => $data['country_id'],
             'password' => Hash::make($data['password']),
         ]);
     }
 
-    public function showRegistrationForm()
-    {
-        $countries = Country::all();
-        return view('users.register', compact('countries'));
-    }
+    // public function showRegistrationForm()
+    // {
+    //     $countries = Country::all();
+    //     return view('users.register', compact('countries'));
+    // }
 
     public function register(RegiterUserRequest $request)
     {

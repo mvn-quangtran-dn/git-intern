@@ -23,6 +23,7 @@ $factory->define(User::class, function (Faker $faker) {
         'email_verified_at' => now(),
         'password' => bcrypt('123456'),
         'remember_token' => Str::random(10),
-        'country_id' => rand(1,2)
+        'country_id' => rand(1,2),
+        'time' => now(),
     ];
 });

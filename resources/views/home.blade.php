@@ -8,6 +8,9 @@
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
+                    @if(session()->has('error'))
+                        <p style="color:red;">{{session()->get('error')}}</p>
+                    @endif
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}

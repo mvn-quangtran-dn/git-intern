@@ -10,7 +10,7 @@ class Profile extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [ 'age', 'gender', 'address', 'user_id', 'date'];
+    protected $fillable = [ 'age', 'gender', 'address', 'user_id', 'date', 'tel'];
 
     // protected $casts = [ 
     //     'gender' => 'boolean',

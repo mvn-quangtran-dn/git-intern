@@ -11,7 +11,8 @@ class User extends Authenticatable
 {
     use Notifiable, SoftDeletes;
 
-    // protected $primaryKey = 'memberid';
+    protected $table = 'users';
+    // protected $primaryKey = 'userId';
     /**
      * The attributes that are mass assignable.
      *
@@ -37,6 +38,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'time' => 'datetime',
     ];
     public function profile() {
         return $this->hasOne(Profile::class);

@@ -2,6 +2,8 @@
 
 @section('content')
     <h1 id="abc">List User Page</h1>
+<h2>{{ $cate }}</h2>
+
     <a class="btn btn-primary" href="{{ route('users.create') }}">Add user</a>
     <span class="btn btn-primary" id="show-users">Show list User</span>
     <table class="table table-striped table-bordered">
@@ -12,6 +14,7 @@
                 <th>Email</th>
                 <th>Created At</th>
                 <th>Country</th>
+                <th>Role</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -23,6 +26,11 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->created_at }}</td>
                     <td>{{ $user->country_id }}</td>
+                    <td>
+                        @foreach($user->roles as $role)
+                            {{ $role->name."," }}
+                        @endforeach
+                    </td>
                     <td>
                         <a class="btn btn-primary" href="{{ route('users.show', $user->id)}}">Show</a>
                         <form action="{{ route('users.destroy', $user->id)}}" method="POST">

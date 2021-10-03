@@ -26,7 +26,7 @@ class CreateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'email', new WhiteListEmailDomain],
+            'email' => ['required', 'email'],
             'password' => 'required|numeric',// ['required', 'numeric']
             'name' => 'required|min:3|max:10',
             'country_id' => 'required|numeric'

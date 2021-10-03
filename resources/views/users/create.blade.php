@@ -1,7 +1,10 @@
 @extends('layouts.master')
+{{-- @section('title', 'Create user') --}}
 @section('content')
 <h1>Create User Page</h1>
-
+@if(session()->has('success'))
+    <p style="color:green;">{{ session()->get('success') }}</p>
+@endif
 <form action="{{route('users.store')}}" method="POST">
     @csrf
     <div class="form-group">

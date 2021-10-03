@@ -14,21 +14,19 @@ class CountryController extends Controller
      */
     public function index()
     {
-        //
+        $countries = Country::with('users', 'posts')->get()->toArray();
+        dd($countries);
     }
     public function getPosts($id)
     {
-        // $country = Country::with('users', 'posts')->findOrFail($id);
-        // dd($country->toArray());
-        \DB::enableQueryLog();
-        //C1
-        $posts = $country->posts;
+        $country  = Country::find($id);
+        $posts = $country->posts; // collection chua array 
 
         //C2
         // $listUserID = $country->users->pluck('id');
         // $posts = Post::whereIn('user_id', $listUserID)->get();
 
-        dd(\DB::getQueryLog());
+        // dd(\DB::getQueryLog());
         dd($posts);
     }
 

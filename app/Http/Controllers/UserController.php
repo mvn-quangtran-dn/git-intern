@@ -13,8 +13,10 @@ use App\Country;
 use App\Http\Requests\CreateUserRequest;
 class UserController extends Controller
 {
+    public  $user ;
     public function __construct()
     {
+        // $this->user  = new User();          
         $this->middleware('check.user.permission')->except(['index', 'create']);
     }
     /**
@@ -24,7 +26,31 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        \DB::enableQueryLog();
+        // $users = User::all();
+        // $users = User::with('roles')->get();
+        $user = User::find(20);
+        dd($user->time->gte(now()));
+        // dd($users->toArray());
+
+        // dd(\DB::getQueryLog());
+        // dd($users->toArray());
+        // $categories= Category::all();
+        // \DB::enableQueryLog();
+        // $users = User::withTrashed()->get();  // where deleted_at is null
+        // dd($users);
+        // dd(\DB::getQueryLog());
+
+        
+
+        // $categories = Category::with([
+        //     'manufators' => function($query){
+        //         return $query->where('status', 1);
+        //     },
+        //     'manufators.products' => function($query){
+        //         return $query->take(10)->get();
+        //     }
+        // ])->get();
         return view('users.index', compact('users'));
     }
 
@@ -47,10 +73,13 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        $data = $request->all(); //array
+        $data = request()->all();
         $data['password'] = bcrypt($data['password']);
-        User::create($data);
-        return redirect()->route('users.index');
+
+       $result=  User::create($data); // true or false| insert many record
+       event(new UserEvent($result));
+        return redirect()->back()->with(['success' => 'create user success']);
+        // return redirect('/users');
     }
 
     /**
@@ -59,9 +88,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::findOrFail($id);
+        $categories= Category::all();
+
+
+        // $user = User::findOrFail($id);
+        dd($user);
         return view('users.show', compact('user'));
     }
 
@@ -96,7 +129,10 @@ class UserController extends Controller
         $data2 = $request->except('name', 'email'); // array data ko bao gom các key đó
         $data3 = $request->only('email'); // array data chỉ chứa value của những key mình muốn lấy
         $data4 = $request->email; //
-        dd($data1,$data2,$data3,$data4);
+
+        $users = User::all(); // object of Collection 
+        // $users= User::find(1); // object of Model user 
+        $users->update(['name' => 'abc']); // error not found function update 
         return 'update user';
     }
 
@@ -142,13 +178,20 @@ class UserController extends Controller
         dd($roles);
     }
 
-    public function setRoles($userId, $roleId)
+    public function setRoles(User $user,Role $role)
     {
-        $user = User::findOrFail($userId);
-        $role = Role::findOrFail($roleId);
+        // $user = User::findOrFail($userId);
+        // $role = Role::findOrFail($roleId);
+        //c1
+        $user->roles()->attach([1,2]);
+        dd('success');
 
-        $roles = [1,2,3];
-        $user->roles()->attach($roles);
+        //c2
+        RoleUser::create([
+            'user_id' =>$user->id,
+            'role_id' =>$role->id,
+        ]);
+
         // RoleUser::create(['user_id'=> $user->id, 'role_id'=> $roleId]);
         dd('success');
 
@@ -158,8 +201,9 @@ class UserController extends Controller
 
     public function removeRoles(User $user, Role $role)
     {
+        $role->users()->detach([$user->id]);
+        //or
         // $user->roles()->detach($role->id);
-        $role->users()->detach($user->id);
 
         // $roles = [2,3];
         // $user->roles()->detach($roles);
@@ -179,5 +223,8 @@ class UserController extends Controller
     {
         $images = $user->images;
         dd($images->toArray());
+
+        
     }
+
 }

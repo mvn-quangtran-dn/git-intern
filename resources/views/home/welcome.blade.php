@@ -83,7 +83,6 @@
                 <div class="title m-b-md">
                     Laravel Home
                 </div>
-
                 
             </div>
         </div>

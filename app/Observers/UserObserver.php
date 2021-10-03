@@ -16,12 +16,12 @@ class UserObserver
     public function created(User $user)
     {
         //code gui mail
-            // $user->profile()->create([
-            //    'tel' => '123456', 
-            //    'age' =>20,
-            //    'gender' => 1,
-            //    'address' => '12 AT']);
-            // });
+        // $user->profile()->create([
+        //     'tel' => '123456', 
+        //     'age' =>20,
+        //     'gender' => 1,
+        //     'address' => '12 AT'
+        // ]);
         Profile::create([
             'tel' => '123456', 
            'age' =>20,
@@ -29,7 +29,8 @@ class UserObserver
            'address' => '12 AT',
            'user_id' => $user->id
         ]);
-        $user->update(['name' => 'chage name after created']);
+        // return...
+        // $user->update(['name' => 'chage name after created']);
     }
 
     /**
