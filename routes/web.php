@@ -60,3 +60,6 @@ Route::get('/test-relate', function(){
    $profile=  $model->updateOrCreate(['user_id' => 38],['tel' => '1243546576', 'age'=>12, 'gender'=> 1, 'address' => 'test updateor create 1'] );
    dd($profile['address']);
 } );
+//khi đặt hàng  thì vào route này
+Route::get('/orders/create', 'OrderController@create');
+Route::post('/orders', 'OrderController@store')->name('orders.store');
